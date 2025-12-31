@@ -1,0 +1,594 @@
+# @e-learning_HostAddress = http://127.0.0.1:8000/api or https://everlearn-backend.onrender.com/api
+
+# @e-learning_HostAddress = http://127.0.0.1:8000/api or https://http://localhost:8000//api
+
+
+@e-learning_HostAddress = http://127.0.0.1:8000/api
+
+# Fill these placeholders before running requests below:
+# @access_token : a JWT access token (or use cookie-based auth by calling /login and storing cookies in your client)
+# @course_id : a course UUID for course-related requests
+# @lesson_id : a lesson UUID for lesson endpoints
+# @quiz_id : a quiz UUID for quiz endpoints
+# @application_id : an application UUID returned when creating an application
+
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NzM5MDYyLCJpYXQiOjE3NjY3MzgxNjIsImp0aSI6IjE4MjVmMTllMDJhNjRmMTY4MTZhOWZlMDk2NzFlZmViIiwidXNlcl9pZCI6IjkyYzQzOTdlLTdhNDItNGI5MC1hZjllLWM1ZjhmN2ExY2NmYiJ9.dVTU-W3f9FP57vjmclKueBY8XKqbVEziKprryix1xoo; expires=Fri, 26 Dec 2025 08:51:02 GMT; HttpOnly; Max-Age=900; Path=/; SameSite=Lax
+
+@course_id=074abfe3-2a59-4ff5-afdb-ddf10b0ea337
+
+
+########################################
+# USER AUTHENTICATION & PROFILE
+########################################
+
+### Register User
+POST {{e-learning_HostAddress}}/users
+Content-Type: application/json
+
+{
+    "username": "gravity123",
+    "full_name": "Gravity Guy",
+    "email": "gravity123@gmail.com",
+    "password": "Password@123",
+    "confirm_password": "Password@123"
+}
+###
+
+### Login User
+POST {{e-learning_HostAddress}}/login
+Content-Type: application/json
+
+{
+    "identifier": "Gravityguy", 
+    "password": "@Sonic101"
+}
+###
+
+### Login User
+POST {{e-learning_HostAddress}}/login
+Content-Type: application/json
+
+{
+    "identifier": "gravity125@gmail.com", 
+    "password": "Password@123"
+    POST {{e-learning_HostAddress}}/tutor/courses/create
+###
+
+### Login User
+POST {{e-learning_HostAddress}}/login
+    PUT {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+
+{
+    "identifier": "Birdie", 
+    "password": "@Sonic101"
+}
+###
+
+### Get Current User Profile
+GET {{e-learning_HostAddress}}/users/me
+Content-Type: application/json
+###
+
+### Update User Profile
+PUT {{e-learning_HostAddress}}/users/me
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "full_name": "Gravity Guy Updated",
+    "avatar": "uploads/new_avatar.jpg"
+}
+###
+
+### Change Password
+PUT {{e-learning_HostAddress}}/users/change-password
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "old_password": "Password@123",
+    "new_password": "NewPassword@123",
+    "confirm_new_password": "NewPassword@123"
+}
+###
+         "role": "tutor",
+########################################
+# COURSES
+########################################
+
+### List Tutors Courses
+GET {{e-learning_HostAddress}}/tutor/courses
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### List All Public Courses
+GET {{e-learning_HostAddress}}/courses
+Content-Type: application/json
+# Cookie: access_token = {{access_token}}
+###
+
+
+### Public Individual Course
+# GET {{e-learning_HostAddress}}/courses/{{course_id}}
+# GET http://127.0.0.1:8000/api/courses/{{course_id}}
+GET http://localhost:8000/api/courses/{{course_id}}
+Content-Type: application/json
+# Cookie: access_token = {{access_token}}
+###
+
+
+
+### Tutor course
+# GET {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+# GET http://127.0.0.1:8000/api/tutor/courses/{{course_id}}
+GET http://localhost:8000/api/tutor/courses/{{course_id}}
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+@course_id2=2569d9c2-0c12-4228-a94a-7e985bfeec8e
+
+### Tutor course (returns 200)
+# GET {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+# GET http://127.0.0.1:8000/api/tutor/courses/{{course_id}}
+GET http://localhost:8000/api/tutor/courses/{{course_id2}}
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### Create a Course (Tutor Only)
+### Fetch Categories
+GET {{e-learning_HostAddress}}/tutor/courses/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODkyNzk3LCJpYXQiOjE3NjU4OTE4OTcsImp0aSI6Ijk5NTJjYjk5MDQ5OTQ4MzhhMWYxMTAzNjA2NzE3OTU1IiwidXNlcl9pZCI6IjkyYzQzOTdlLTdhNDItNGI5MC1hZjllLWM1ZjhmN2ExY2NmYiJ9.W58qOGeE1UeBz1cuqgqOFca856E3X2tZfoRKKSPP-Ls; expires=Tue, 16 Dec 2025 13:46:37 GMT; HttpOnly; Max-Age=900; Path=/; SameSite=Lax
+Content-Type: application/json
+###
+
+
+### Fetch Categories
+GET {{e-learning_HostAddress}}/tutor/courses/categories
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+###
+
+
+### Create Course
+POST {{e-learning_HostAddress}}/tutor/courses/create
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data
+
+--boundary123
+Content-Disposition: form-data; name="title"
+
+Cyber Security 101
+--boundary123
+Content-Disposition: form-data; name="description"
+
+Introductory course to Cyber Security fundamentals.
+--boundary123
+Content-Disposition: form-data; name="category_id"
+
+{{valid_category_uuid}}
+--boundary123
+Content-Disposition: form-data; name="level"
+
+Beginner
+--boundary123
+Content-Disposition: form-data; name="duration"
+
+12 weeks
+--boundary123
+Content-Disposition: form-data; name="price"
+
+50000
+--boundary123
+Content-Disposition: form-data; name="image"; filename="course-image.jpg"
+Content-Type: image/jpeg
+
+< ./path-to-your-image/course-image.jpg
+--boundary123--
+###
+
+
+
+POST {{e-learning_HostAddress}}/tutor/courses/create
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+{
+         "role": "tutor",
+    "description": "Learn Python from scratch",
+    "category": "Programming",
+    "thumbnail": "uploads/python_course.jpg"
+}
+### Create a Course (Instructor Only)
+POST {{e-learning_HostAddress}}/instructor/courses/create
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    POST {{e-learning_HostAddress}}/apply/role
+PUT {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+{
+      "role": "tutor",
+    "description": "Updated course description"
+}
+}
+###
+
+### Update Course (Instructor Only)
+PUT {{e-learning_HostAddress}}/courses/{{course_id}}
+Authorization: Bearer {{access_token}}
+### Delete Course (Tutor Only)
+DELETE {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+{
+    "title": "Intro to Python - Updated",
+    "description": "Updated course description"
+}
+###
+
+### Create Lesson (Tutor Only)
+POST {{e-learning_HostAddress}}/tutor/courses/{{course_id}}/lessons
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+{
+    "title": "Lesson 1: Python Basics",
+    "content": "Introduction to variables, loops, and functions.",
+    "video_url": "uploads/python_lesson1.mp4"
+}
+########################################
+# LESSONS
+########################################
+
+### List Lessons of a Course
+GET {{e-learning_HostAddress}}/courses/{{course_id}}/lessons
+Authorization: Bearer {{access_token}}
+###
+
+### Tutor Dashboard
+GET {{e-learning_HostAddress}}/tutor/dashboard
+Authorization: Bearer {{access_token}}
+GET {{e-learning_HostAddress}}/lessons/{{lesson_id}}
+Authorization: Bearer {{access_token}}
+###
+
+### Create Lesson (Instructor Only)
+### List All Students (Tutor/Admin)
+GET {{e-learning_HostAddress}}/students
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+###
+
+
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NzM5MDYyLCJpYXQiOjE3NjY3MzgxNjIsImp0aSI6IjE4MjVmMTllMDJhNjRmMTY4MTZhOWZlMDk2NzFlZmViIiwidXNlcl9pZCI6IjkyYzQzOTdlLTdhNDItNGI5MC1hZjllLWM1ZjhmN2ExY2NmYiJ9.dVTU-W3f9FP57vjmclKueBY8XKqbVEziKprryix1xoo; expires=Fri, 26 Dec 2025 08:51:02 GMT; HttpOnly; Max-Age=900; Path=/; SameSite=Lax
+
+@course_id = 074abfe3-2a59-4ff5-afdb-ddf10b0ea337
+@module_id = 7ef9c918-884e-40e3-bc0d-79070a4633c8
+@deleted_course1 = 2569d9c2-0c12-4228-a94a-7e985bfeec8e
+@deleted_course2 = 85598aa5-135d-4632-b6a3-96e24899832e
+
+
+### LOGIN USER (to get session cookie)
+POST {{e-learning_HostAddress}}/login
+Content-Type: application/json
+
+{
+    "identifier": "Gravityguy", 
+    "password": "@Sonic101"
+}
+###
+
+
+### LIST DELETED COURSES
+GET {{e-learning_HostAddress}}/tutor/courses/deleted
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### RESTORE SOFT DELETED COURSE
+PATCH {{e-learning_HostAddress}}/tutor/courses/{{deleted_course1}}/restore
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### CREATE MODULE
+POST {{e-learning_HostAddress}}/tutor/courses/{{course_id}}/modules/add
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+
+{
+  "title": "Introduction to Cyber Security",
+  "order": 3,
+  "description": "This module covers the basics of cybersecurity."
+}
+###
+
+
+### Update a course module
+PATCH {{e-learning_HostAddress}}/tutor/courses/{{course_id}}/modules/{{module_id}}/update
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+
+{
+  "title": "Updated Module Title",
+  "order": 2,
+  "description": "Updated module description",
+  "is_published": true
+}
+###
+
+
+PATCH {{e-learning_HostAddress}}/tutor/courses/{{course_id}}/modules/{{module_id}}/update
+# tutor/modules/<uuid:module_id>/update
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+
+{
+  "title": "Introduction to Cyber Security",
+  "order": 1,
+  "description": "This module covers the basics of cybersecurity."
+}
+###
+
+
+### UPDATE MODULE
+PUT {{e-learning_HostAddress}}/tutor/modules/123e4567-e89b-12d3-a456-426614174000/update
+Content-Type: application/json
+# Cookie: sessionid=<your_session_cookie_here>
+
+{
+  "title": "Updated Module Title",
+  "order": 2,
+  "description": "Updated description for this module.",
+  "is_published": true
+}
+
+###
+
+### DELETE MODULE
+DELETE http://localhost:8000/tutor/modules/123e4567-e89b-12d3-a456-426614174000/delete
+# Cookie: sessionid=<your_session_cookie_here>
+
+###
+
+### GET MODULE LIST FOR COURSE
+GET http://localhost:8000/tutor/courses/074abfe3-2a59-4ff5-afdb-ddf10b0ea337/modules
+# Cookie: sessionid=<your_session_cookie_here>
+
+
+
+### List All Students
+GET {{e-learning_HostAddress}}/tutor/students
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### Tutor's earning
+GET {{e-learning_HostAddress}}/tutor/earnings
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### Get Course
+GET {{e-learning_HostAddress}}/tutor/courses/{{course_id}}
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+### Restore Course
+POST {{e-learning_HostAddress}}/tutor/course/{{course_id2}}/restore/
+Content-Type: application/json
+Cookie: access_token = {{access_token}}
+###
+
+
+{
+    "title": "Lesson 1: Python Basics",
+### Apply to be Tutor or Admin
+POST {{e-learning_HostAddress}}/apply/role
+Content-Type: application/json
+{
+    "role": "tutor",
+    "bio": "I have 5 years teaching experience and want to help students learn."
+}
+
+### Update Lesson
+    "role": "admin",
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+    "is_tutor": true,
+    "title": "Updated Lesson 1 Title",
+    "content": "Updated content..."
+}
+###
+
+### Delete Lesson
+DELETE {{e-learning_HostAddress}}/lessons/{{lesson_id}}
+Authorization: Bearer {{access_token}}
+###
+
+########################################
+# ENROLLMENTS
+########################################
+
+### Enroll in a Course
+POST {{e-learning_HostAddress}}/courses/{{course_id}}/enroll
+Authorization: Bearer {{access_token}}
+###
+
+### Mark Lesson Complete
+POST {{e-learning_HostAddress}}/enrollments/{{enrollment_id}}/lessons/{{lesson_id}}/complete
+Authorization: Bearer {{access_token}}
+###
+
+### List User Enrollments
+GET {{e-learning_HostAddress}}/users/me/enrollments
+Authorization: Bearer {{access_token}}
+###
+
+########################################
+# QUIZZES
+########################################
+
+### List Quizzes for a Course
+GET {{e-learning_HostAddress}}/courses/{{course_id}}/quizzes
+Authorization: Bearer {{access_token}}
+###
+
+### Submit Quiz
+POST {{e-learning_HostAddress}}/quizzes/{{quiz_id}}/submit
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "answers": [
+        {"question_id": 1, "answer": "A"},
+        {"question_id": 2, "answer": "B"}
+    ]
+}
+###
+
+### Get Quiz Results
+GET {{e-learning_HostAddress}}/quizzes/{{quiz_id}}/results
+Authorization: Bearer {{access_token}}
+###
+
+########################################
+# ADMIN / INSTRUCTOR ENDPOINTS
+########################################
+
+### Instructor Dashboard
+GET {{e-learning_HostAddress}}/instructor/dashboard
+Authorization: Bearer {{access_token}}
+###
+
+### List All Students (Instructor/Admin)
+GET {{e-learning_HostAddress}}/students
+Authorization: Bearer {{access_token}}
+###
+
+########################################
+# APPLICATIONS / ADMIN (new endpoints)
+########################################
+
+### Apply to be Instructor or Admin
+POST {{e-learning_HostAddress}}/apply/role
+Content-Type: application/json
+{
+    "role": "instructor",
+    "bio": "I have 5 years teaching experience and want to help students learn."
+}
+###
+
+### Apply to be Instructor or Admin
+POST {{e-learning_HostAddress}}/apply/role
+Content-Type: application/json
+{
+    "role": "admin",
+    "bio": "I have 5 years management experience and want to help manage this website."
+}
+###
+
+### List applications (admin only)
+GET {{e-learning_HostAddress}}/applications
+Authorization: Bearer {{access_token}}
+###
+
+### Review application (approve)
+POST {{e-learning_HostAddress}}/applications/{{application_id}}/review
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+{
+    "action": "approve"
+}
+###
+
+### Set user roles (admin only)
+POST {{e-learning_HostAddress}}/admin/set-roles
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+{
+    "email": "user@example.com",
+    "is_instructor": true,
+    "is_admin": false
+}
+###
+
+### Email verification - send code
+POST {{e-learning_HostAddress}}/email/send-code
+Content-Type: application/json
+{
+    "email": "verify@example.com"
+}
+###
+
+### Email verification - verify code
+POST {{e-learning_HostAddress}}/email/verify
+Content-Type: application/json
+{
+    "email": "verify@example.com",
+    "code": "<PASTE_CODE_FROM_EMAIL_OR_DB>"
+}
+###
+
+### Admin analytics - site
+GET {{e-learning_HostAddress}}/admin/analytics/site
+Authorization: Bearer {{access_token}}
+###
+
+### Admin analytics - course stats
+GET {{e-learning_HostAddress}}/admin/analytics/courses/{{course_id}}
+Authorization: Bearer {{access_token}}
+###
+
+########################################
+# COOKIE-BASED SEQUENCE: CSRF -> LOGIN -> APPLY (cookie-jar / REST client)
+########################################
+
+### Notes
+# - Use a cookie-capable client (VSCode REST Client, Postman, or curl with -c/-b).
+# - Workflow: GET /csrf -> copy csrfToken + cookie -> POST /login with X-CSRFToken header and cookies -> POST /apply/role with same header & cookies.
+
+### Step A - Get CSRF token (sets csrftoken cookie)
+GET {{e-learning_HostAddress}}/csrf
+Accept: application/json
+###
+
+### Step B - Login (use cookie jar and X-CSRFToken)
+POST {{e-learning_HostAddress}}/login
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "identifier": "gravity125@gmail.com",
+  "password": "Password@123"
+}
+###
+
+### Step C - Apply to be Instructor using cookie auth (requires csrftoken + cookies)
+POST {{e-learning_HostAddress}}/apply/role
+Content-Type: application/json
+X-CSRFToken: {{csrf_token}}
+
+{
+  "role": "instructor",
+  "bio": "Applying via cookie-based sequence"
+}
+###
+
+### Quick curl (bash) example
+# Save cookies to cookiejar.txt, extract csrf token to variable, login, then apply.
+# Requires 'jq' to parse JSON.
+curl -c cookiejar.txt -s "{{e-learning_HostAddress}}/csrf" -o csrf.json
+csrf_token=$(jq -r '.csrfToken' csrf.json)
+curl -b cookiejar.txt -c cookiejar.txt -H "Content-Type: application/json" -H "X-CSRFToken: $csrf_token" -d '{"identifier":"gravity125@gmail.com","password":"Password@123"}' "{{e-learning_HostAddress}}/login" -i
+curl -b cookiejar.txt -H "Content-Type: application/json" -H "X-CSRFToken: $csrf_token" -d '{"role":"instructor","bio":"Applying via cookie-based sequence"}' "{{e-learning_HostAddress}}/apply/role" -i
