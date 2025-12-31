@@ -103,12 +103,12 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Use custom user model
-AUTH_USER_MODEL = "core.CustomUser"
+AUTH_USER_MODEL = "users.CustomUser"
 
 # Rest Framework Configuration
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "core.authentication.CookieJWTAuthentication",  # read JWT from cookie
+        "users.authentication.CookieJWTAuthentication",  # read JWT from cookie
     )
 }
 

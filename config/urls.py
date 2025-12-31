@@ -31,7 +31,14 @@ def root_view(request):
 urlpatterns = [
     path(f"{admin_url}/", admin.site.urls),
     # path(f"{admin_url}/dashboard/", admin_dashboard, name="admin-dashboard"),
-    path("api/", include("core.urls")), # App's API endpoints
+    # path("api/", include("core.urls")),
+    path("api/", include("users.urls")),
+    # path("api/", include("wallet.urls")),
+    # path("api/", include("transactions.urls")),
+    # path("api/", include("plans.urls")),
+    # path("api/", include("support.urls")),
+    # path("api/", include("notifications.urls")),
+    # path("api/", include("landing.urls")),
     path("", root_view), # Minimal root endpoint
 ]
 
