@@ -18,8 +18,10 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "full_name",
+            "username",
             "email",
-            "phone",
+            "country",
+            "state",
         ]
 
     def get_full_name(self, obj):
@@ -34,7 +36,11 @@ class RegisterSerializer(serializers.Serializer):
 
     first_name = serializers.CharField(required=True, max_length=50)
     last_name = serializers.CharField(required=True, max_length=50)
-
+    username = serializers.CharField(
+        required=True,
+        max_length=50,
+        validators=[UniqueValidator(queryset=User.objects.all(), message="Username already exists")]
+    )
     email = serializers.EmailField(
         required=True,
         validators=[
@@ -45,12 +51,8 @@ class RegisterSerializer(serializers.Serializer):
         ],
     )
 
-    phone = serializers.CharField(
-        required=False,
-        allow_blank=True,
-        allow_null=True,
-        max_length=20,
-    )
+    country = serializers.CharField(required=True, max_length=50)
+    state = serializers.CharField(required=True, max_length=50)
 
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
@@ -87,7 +89,9 @@ class RegisterSerializer(serializers.Serializer):
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            phone=validated_data.get("phone"),
+            username=validated_data["username"],
+            country=validated_data["country"],
+            state=validated_data["state"],
         )
         return user
 

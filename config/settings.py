@@ -99,7 +99,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "core.backends.UsernameOrEmailBackend",
+    "users.backends.EmailBackend",
 ]
 
 # Use custom user model

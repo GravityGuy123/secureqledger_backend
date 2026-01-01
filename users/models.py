@@ -6,7 +6,6 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
-# Create your models here.
 
 # ---------------------------
 # Custom User Manager
@@ -37,7 +36,7 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, password, **extra_fields)    
 
 
 # ---------------------------
@@ -46,43 +45,49 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    # Basic info
+    email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
 
-    email = models.EmailField(unique=True)
+    # Location
+    country = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
 
-    phone = models.CharField(
-        max_length=20,
-        null=True,
-        blank=True,
-    )
-
-    # auth flags required by Django
+    # Auth flags
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    # timestamps
+    # Roles
+    is_moderator = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+
+    # Email verification
+    is_email_verified = models.BooleanField(default=False)
+
+    # Timestamps
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "username", "country", "state"]
 
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.email})"
+        return f"{self.username} ({self.email})"
 
     class Meta:
         db_table = "custom_users"
         indexes = [
             models.Index(fields=["email"]),
+            models.Index(fields=["username"]),
         ]
-
 
 # ---------------------------
 # ACTIVE ONLY MANAGER

@@ -9,7 +9,6 @@ from rest_framework.decorators import (
     permission_classes,
     authentication_classes,
 )
-
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -19,7 +18,6 @@ from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from .authentication import CookieJWTAuthentication
 # from .tasks import send_welcome_email
-
 from .serializers import (
     RegisterSerializer,
     CurrentUserSerializer,
@@ -75,8 +73,10 @@ def register_user(request):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "full_name": user.full_name,
+            "username": user.username,
             "email": user.email,
-            "phone": user.phone,
+            "country": user.country,
+            "state": user.state,
         }, status=status.HTTP_201_CREATED)
 
     except ValidationError as e:
@@ -90,7 +90,6 @@ def register_user(request):
 # ---------------------------
 @api_view(["POST"])
 def login_view(request):
-
     email = request.data.get("email")
     password = request.data.get("password")
 
@@ -114,10 +113,12 @@ def login_view(request):
         "first_name": user.first_name,
         "last_name": user.last_name,
         "full_name": user.full_name,
+        "username": user.username,
         "email": user.email,
-        "phone": user.phone,
-        "is_admin": user.is_admin,              # ✅ send admin flag
-        "is_moderator": user.is_moderator,      # ✅ send moderator flag
+        "country": user.country,
+        "state": user.state,
+        "is_admin": user.is_admin,
+        "is_moderator": user.is_moderator,
     }, status=200)
 
     set_jwt_cookies(response, str(refresh.access_token), str(refresh), request)
@@ -199,8 +200,10 @@ def user_view(request):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "full_name": user.full_name,
+            "username": user.username,
             "email": user.email,
-            "phone": user.phone,
+            "country": user.country,
+            "state": user.state,
         })
 
     # ---- UPDATE PROFILE ----
@@ -208,21 +211,23 @@ def user_view(request):
         first_name = request.data.get("first_name")
         last_name = request.data.get("last_name")
         email = request.data.get("email")
-        phone = request.data.get("phone")
+        username = request.data.get("username")
+        country = request.data.get("country")
+        state = request.data.get("state")
         password = request.data.get("password")
 
         if first_name is not None:
             user.first_name = first_name
-
         if last_name is not None:
             user.last_name = last_name
-
         if email is not None:
             user.email = email
-
-        if phone is not None:
-            user.phone = phone
-
+        if username is not None:
+            user.username = username
+        if country is not None:
+            user.country = country
+        if state is not None:
+            user.state = state
         if password:
             user.set_password(password)
 
@@ -231,6 +236,8 @@ def user_view(request):
         except IntegrityError as e:
             if "email" in str(e):
                 return Response({"email": ["This email is already taken."]}, status=400)
+            if "username" in str(e):
+                return Response({"username": ["This username is already taken."]}, status=400)
             return Response({"detail": "Update failed."}, status=400)
 
         return Response({
@@ -238,8 +245,10 @@ def user_view(request):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "full_name": user.full_name,
+            "username": user.username,
             "email": user.email,
-            "phone": user.phone,
+            "country": user.country,
+            "state": user.state,
         })
 
 
